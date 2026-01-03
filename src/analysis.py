@@ -2,7 +2,7 @@
 Analysis Module
 
 This module contains functions for analyzing co-op salary data.
-Placeholder for analysis functionality - does not implement actual computations.
+They don't actually do any computation, I just use them when needed.
 """
 
 from typing import Dict, List, Optional, Any
