@@ -1,7 +1,6 @@
 import pandas as pd
 from pathlib import Path 
 import re
-import pandas as pd
 import numpy as np
 from typing import Optional, Tuple
 
@@ -10,13 +9,14 @@ HOURS_PER_WEEK = 40
 WEEKS_PER_MONTH = 4
 WEEKS_PER_TERM = 16
 
-RAW_DATA_PATH = Path("data/raw/Waterloo Co-op Salaries List for Analysis.csv")
-CLEAN_DATA_PATH = Path("data/processed/Waterloo Co-op Salaries List for Analysis.csv")
+RAW_DATA_PATH = Path("data/raw/Waterloo_Co-op_Salaries_List_for_Analysis.csv")
+CLEAN_DATA_PATH = Path("data/processed/Waterloo_Co-op_Salaries_List_for_Analysis.csv")
 
 def load_raw_data():
-    return pd.read_csv(RAW_DATA_PATH)
-
-s = s.lower().strip()
+    # Skip the introductory note row and align columns with parser expectations
+    df = pd.read_csv(RAW_DATA_PATH, skiprows=1, header=0)
+    df.columns = ["company_role", "salary_raw"]
+    return df
 
 def normalize_text(s: str) -> str:
     if pd.isna(s):
@@ -106,21 +106,16 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-from pathlib import Path
-
-RAW_PATH = Path("data/raw/coop_salaries.csv")
-CLEAN_PATH = Path("data/processed/coop_salaries_clean.csv")
-
 def main():
-    df_raw = pd.read_csv(RAW_DATA_PATH)
+    df_raw = load_raw_data()
     df_clean = clean_data(df_raw)
 
-    CLEAN_PATH.parent.mkdir(parents=True, exist_ok=True)
+    CLEAN_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
     df_clean.to_csv(CLEAN_DATA_PATH, index=False)
 
     print(f"Cleaned {len(df_clean)} rows saved to {CLEAN_DATA_PATH}")
 
 if __name__ == "__main__":
-    main()
+    main() 
 
 python src/data_cleaning.py
